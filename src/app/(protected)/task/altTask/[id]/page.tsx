@@ -1,24 +1,20 @@
 import { headers } from 'next/headers'
+import { redirect } from 'next/navigation' 
 
 import { auth } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 
 import { TaskForm } from '../../_components/task-form'
 
-type PageProps = {
-  params: {
-    id: string;
-  };
-};
 
-export default async function EditTaskPage({ params }: PageProps) {
+export default async function EditTaskPage({ params }: { params: { id: string } }) {
   const session = await auth.api.getSession({
-      headers: await headers(),
-})
+    headers: await headers(),
+  })
   const userId = session?.user?.id
 
   if (!userId) {
-    return notFound() 
+    return redirect('/')
   }
 
   const task = await prisma.task.findUnique({
