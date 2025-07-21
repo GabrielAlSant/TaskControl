@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation' 
 
 import { Button } from '@/components/ui/button'
 import prisma from '@/lib/prisma'
@@ -29,7 +29,7 @@ export default async function ViewTaskPage({ params }: { params: { id: string } 
   })
 
   if (!task) {
-    notFound()
+    return redirect('/')
   }
 
   return (

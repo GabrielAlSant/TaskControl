@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation' 
 
 import { Button } from '@/components/ui/button'
 import prisma from '@/lib/prisma'
@@ -20,7 +20,7 @@ export default async function ViewUserPage({ params, searchParams }: ViewUserPag
   })
 
   if (!user) {
-    notFound()
+     return redirect('/')
   }
 
   const allTasks = await prisma.task.findMany({
