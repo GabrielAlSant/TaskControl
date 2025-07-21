@@ -9,14 +9,15 @@ import TasksTable from './_components/tasks-table'
 export default async function TarefasPage({
   searchParams,
 }: {
-  searchParams?: { q?: string }
+  searchParams?: Promise<{ q?: string }>
 }) {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user) {
     redirect('/')
   }
 
-  const query = searchParams?.q || ''
+  const resolvedSearchParams = await searchParams
+  const query = resolvedSearchParams?.q || ''
 
   const tasks = await prisma.task.findMany({
     where: {

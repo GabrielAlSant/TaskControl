@@ -7,9 +7,11 @@ import prisma from '@/lib/prisma'
 
 import TaskViewClient from '../_components/task-view-client'
 
-export default async function ViewTaskPage({ params }: { params: { id: string } }) {
+export default async function ViewTaskPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  
   const task = await prisma.task.findUnique({
-    where: { id: params.id },
+    where: { id: id },
     include: {
       user: true,
       comments: {

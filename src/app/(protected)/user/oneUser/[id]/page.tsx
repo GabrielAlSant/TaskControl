@@ -8,13 +8,14 @@ import prisma from '@/lib/prisma'
 import UserTaskView from '../_components/user-task-view'
 
 interface ViewUserPageProps {
-  params: { id: string }
-  searchParams?: { q?: string }
+  params: Promise<{ id: string }>
+  searchParams?: Promise<{ q?: string }>
 }
 
 export default async function ViewUserPage({ params, searchParams }: ViewUserPageProps) {
-  const userId = params.id
-  const query = searchParams?.q || ''
+  const { id: userId } = await params
+  const resolvedSearchParams = await searchParams
+  const query = resolvedSearchParams?.q || ''
   const user = await prisma.user.findUnique({
     where: { id: userId },
   })

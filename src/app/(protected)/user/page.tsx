@@ -10,7 +10,7 @@ import UsersTable from './_components/users-table'
 export default async function UsuariosPage({
   searchParams,
 }: {
-  searchParams?: { q?: string }
+  searchParams?: Promise<{ q?: string }>
 }) {
   const session = await auth.api.getSession({ headers: await headers() })
 
@@ -18,7 +18,8 @@ export default async function UsuariosPage({
     redirect('/')
   }
 
-  const query = searchParams?.q || ''
+  const resolvedSearchParams = await searchParams
+  const query = resolvedSearchParams?.q || ''
 
   const usersWithTaskCount = await prisma.user.findMany({
     where: {
@@ -44,7 +45,7 @@ export default async function UsuariosPage({
       <div className="flex items-center">
                {' '}
         <h1 className="text-lg font-semibold md:text-2xl">
-          Gerenciar Usuários
+        Usuários
         </h1>
              {' '}
       </div>
